@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Personal Mood Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --bg-day: #fafafa;
+        --text-day: #0f172a;
+        --bg-night: #111827;
+        --text-night: #f9fafb;
+        --accent: #a3e635;
+        --button-bg: #d9f99d;
+        --button-hover: #bef264;
+        --box-day: #f0fdf4;
+        --box-night: #1e293b;
+        --gradient: linear-gradient(90deg, #BFF102, #72BD03);
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-day);
+        color: var(--text-day);
+        transition: background-color 0.4s ease, color 0.4s ease;
+        padding: 1rem 2rem 2rem;
+        min-height: 100vh;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      h1 {
+        color: #112e04;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      label {
+        font-weight: 500;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .center-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        gap: 1rem;
+      }
+
+      input {
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        font-size: 1rem;
+        outline: none;
+        width: 240px;
+      }
+
+      input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.3);
+      }
+
+      .greeting {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 1rem 0;
+        width: fit-content;
+        display: block;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: background 0.4s ease;
+      }
+
+      .greeting .emoji {
+        -webkit-text-fill-color: initial;
+      }
+
+      .toggle-wrapper {
+        display: flex;
+        align-items: left;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 28px;
+      }
+
+      .switch input {
+        display: none;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #cbd5e1;
+        border-radius: 28px;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background-color: var(--accent);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(22px);
+      }
+
+      button {
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background-color: var(--button-bg);
+        transition: background 0.25s, transform 0.1s;
+      }
+
+      button:hover {
+        background-color: var(--button-hover);
+        transform: translateY(-2px);
+      }
+
+      .secret-btn {
+        background-color: var(--accent);
+        color: #1a1a1a;
+        margin-bottom: 0.5rem;
+      }
+
+      .mood-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .mood-box {
+        background-color: var(--box-day);
+        border-radius: 12px;
+        width: 160px;
+        height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: width 0.25s, height 0.25s, background-color 0.4s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .mood-emoji {
+        font-size: 2.5rem;
+        margin-bottom: 0.3rem;
+      }
+
+      .mood-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .secret {
+        background-color: #fefce8;
+        border-left: 4px solid #facc15;
+        padding: 0.8rem;
+        border-radius: 6px;
+        margin-top: 1rem;
+        display: none;
+        max-width: auto;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        transition: opacity 0.3s ease;
+      }
+
+      body.night {
+        background-color: var(--bg-night);
+        color: var(--text-night);
+      }
+
+      body.night h1 {
+        color: #fafafa;
+      }
+
+      body.night .mood-box {
+        background-color: var(--box-night);
+        color: var(--text-night);
+      }
+
+      body.night .secret {
+        background-color: #1f2937;
+        border-left-color: var(--accent);
+        color: #f9fafb;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>Personal Mood Dashboard</h1>
+      <div class="toggle-wrapper">
+         <span>☀️</span>
+         <label class="switch">
+           <input id="modeToggle" type="checkbox" />
+           <span class="slider"></span>
+         </label>
+         <span>🌙</span>
+    </div>
+    </div>
+
+   <div class="center-block">
+     <div class="input-section">
+      <label for="nameInput">Enter Your Name:</label>
+      <input id="nameInput" type="text" placeholder="Your name here" />
+    </div>
+
+    <div id="greeting" class="greeting">Hello, Friend! <span class="emoji">👋</span></div>
+
+    <button id="secretToggle" class="secret-btn">Show Secret Message</button>
+    </div>
+
+
+    <div class="mood-section">
+      <div id="moodBox" class="mood-box">
+        <div class="mood-emoji" id="moodEmoji">😩</div>
+        <div class="mood-text">Exhausted</div>
+      </div>
+
+      <div class="mood-actions">
+        <button id="shrinkBtn">Shrink</button>
+        <button id="growBtn">Grow</button>
+      </div>
+    </div>
+
+    <div id="secretMsg" class="secret">
+      ✨ Hidden message: Keep going; small steps add up. ✨
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
